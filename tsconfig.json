@@ -1,0 +1,3 @@
+{
+	"extends": "@in-sync/typescript-config/base.json"
+}

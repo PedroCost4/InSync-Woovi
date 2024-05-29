@@ -1,0 +1,154 @@
+schema {
+  query: query
+  mutation: mutation
+}
+
+"""Root query"""
+type query {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Fetches objects given their IDs"""
+  nodes(
+    """The IDs of objects"""
+    ids: [ID!]!
+  ): [Node]!
+
+  """All users"""
+  users(after: String, first: Int, before: String, last: Int): UserConnection!
+
+  """me"""
+  me(after: String, first: Int, before: String, last: Int): User
+}
+
+"""An object with an ID"""
+interface Node {
+  """The id of the object."""
+  id: ID!
+}
+
+"""A connection to a list of items."""
+type UserConnection implements Connection {
+  """Number of items in this connection."""
+  count: Int
+
+  """
+  A count of the total number of objects in this connection, ignoring pagination.
+  This allows a client to fetch the first five objects by passing "5" as the
+  argument to "first", then fetch the total count so it could display "5 of 83",
+  for example.
+  """
+  totalCount: Int
+
+  """Offset from start."""
+  startCursorOffset: Int!
+
+  """Offset till end."""
+  endCursorOffset: Int!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [UserEdge]!
+}
+
+"""A connection to a list of items."""
+interface Connection {
+  """Number of items in this connection."""
+  count: Int
+
+  """
+  A count of the total number of objects in this connection, ignoring pagination.
+  This allows a client to fetch the first five objects by passing "5" as the
+  argument to "first", then fetch the total count so it could display "5 of 83",
+  for example.
+  """
+  totalCount: Int
+
+  """Offset from start."""
+  startCursorOffset: Int!
+
+  """Offset till end."""
+  endCursorOffset: Int!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
+"""An edge in a connection."""
+type UserEdge {
+  """The item at the end of the edge."""
+  node: User
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+type User implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """mongoose_id"""
+  _id: String!
+  username: String!
+  avatar: String
+  email: String
+}
+
+type mutation {
+  register(input: RegisterUserInput!): RegisterUserPayload
+  login(input: LoginMutationInput!): LoginMutationPayload
+}
+
+type RegisterUserPayload {
+  token: String
+  user: User
+  clientMutationId: String
+}
+
+input RegisterUserInput {
+  username: String!
+  email: EmailAddress
+  password: String!
+  clientMutationId: String
+}
+
+"""
+A field whose value conforms to the standard internet email address format as specified in HTML Spec: https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address.
+"""
+scalar EmailAddress @specifiedBy(url: "https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address")
+
+type LoginMutationPayload {
+  token: String!
+  user: User
+  clientMutationId: String
+}
+
+input LoginMutationInput {
+  password: NonEmptyString
+  email: String
+  username: String
+  clientMutationId: String
+}
+
+"""A string that cannot be passed as an empty value"""
+scalar NonEmptyString
