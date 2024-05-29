@@ -1,0 +1,10 @@
+{
+	"extends": "@in-sync/typescript-config/react-library.json",
+	"compilerOptions": {
+		"paths": {
+			"@ui/*": ["./src/*"]
+		}
+	},
+	"include": ["."],
+	"exclude": ["dist", "build", "node_modules"]
+}

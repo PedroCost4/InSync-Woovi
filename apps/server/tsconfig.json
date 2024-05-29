@@ -1,0 +1,19 @@
+{
+	"compilerOptions": {
+		"skipLibCheck": true,
+		"paths": {
+			"@/*": ["./src/*"]
+		},
+		"rootDirs": ["src"],
+		"outDir": "./dist",
+		"lib": ["es2020", "ESNext.AsyncIterable"],
+		"target": "es2020",
+		"module": "ES2020",
+		"strict": true,
+		"moduleResolution": "node",
+		"esModuleInterop": true,
+		"types": ["node"]
+	},
+	"exclude": ["node_modules"],
+	"include": ["env.d.ts", "./**/*.ts"]
+}
